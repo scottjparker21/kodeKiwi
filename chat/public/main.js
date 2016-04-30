@@ -251,11 +251,16 @@ $(function() {
 
   function pullFile() {
     console.log("pulling file");
-    socket.emit('pull file', data);
-  
+    socket.emit('pull file', {});
   }
 
 
+  //$( "#push" ).on("click", pushFile);
+
+ /* function pushFile() {
+    console.log("pushing file");
+    socket.emit('push file', {});
+  }*/
 
 
 
@@ -326,6 +331,7 @@ $(function() {
     console.log("pulling file from server");
     editor.setValue(data.file);
   })
+
 
   // Whenever the server emits 'typing', show the typing message
   socket.on('typing', function (data) {
