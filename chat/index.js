@@ -6,6 +6,11 @@ var io = require('socket.io').listen(server);
 var port = process.env.PORT || 3000;
 var Github = require('github-api');
 
+var username = "scottjparker21";
+var reponame = "kodeKiwi";
+var email = "scottjparker21@gmail.com";
+var author = "Scott Parker";
+var oauthToken = "5ceb2ec5187c0f8c8c2cbe321461dbd6964e10c9";
 var options = {
   'author':{'name': author, 'email': email},
   'commmitter':{'name': author, 'email': email}
@@ -77,22 +82,48 @@ io.on('connection', function (socket) {
 
 
 
-  socket.on('pull file', function(data) {
+  socket.on('pull file', function() {
     var github = new Github({
-      'token' : "5ceb2ec5187c0f8c8c2cbe321461dbd6964e10c9",
+      'token' : "ba26df95ccddf03e066259d517a44e0763a3f052",
       'auth' : "oauth"
     });
 
-    repo.read('master', 'github/index.html', function(err, data) {
+    var repo = github.getRepo(username, reponame);
+
+    repo.read('master', 'chat/public/index.html', function(err, data) {
       console.log(data);
+      console.log("this is the data")
       console.log(err);
 
-      io.sockets.on('new git', {
+      io.sockets.emit('new git', {
         file : data
       });
     });
   });
 
+
+
+
+/*  socket.on('push file', function(){
+    var branchToModiy = 'master';
+    var fileToModify = 'chat/public/dummy.html';
+    var fileContents = 'this is an attempt to push to the dummy file';
+    var commitMsg = 'attempting to change dummy file';
+
+    var github = new Github({
+      'token' : "ba26df95ccddf03e066259d517a44e0763a3f052",
+      'auth' : "oauth"
+    });
+
+    var repo = github.getRepo(username, reponame);
+
+    repo.write(branchToModiy, fileToModify, fileContents, commitMsg, options, function(err) {
+      console.log(data);    
+      io.sockets.emit('new push', {
+        file : data
+      });
+    });
+  });*/
 
 
 
@@ -111,45 +142,3 @@ io.on('connection', function (socket) {
   });
 });
 
-
-
-
-
-
-//api.js from initial test
-//------------------------
-
-//set the information your need to use the github-api
-var username = "motlj";
-var reponame = "example";
-var email = "joshuadamotl@gmail.com";
-var author = "Joshua Motl";
-
-// https://github.com/settings/tokens
-var oauthToken = "5ceb2ec5187c0f8c8c2cbe321461dbd6964e10c9";
-
-//create instance of wrapper
-var github = new Github({
-  'token':oauthToken,
-  'auth':"oauth"
-})
-
-//create rep object
-var repo = github.getRepo(username, reponame);
-
-//set the changes you want to make
-var branchToModiy = 'master';
-var fileToModify = 'github/index.html';
-var fileContents = 'asdasdasdasdasdasdasdasdasdasdasdasdasdasd';
-var commitMsg = 'attempting to change';
-
-//write the changes to Github
-repo.write(branchToModiy, fileToModify, fileContents, commitMsg, options, function(err) {});
-
-//reads file from github
-repo.read('master', 'github/index.html', function(err, data) {
-  var fileContents = data;
-  console.log(data);
-  document.getElementById("#editor").innerHTML = fileContents;
-  console.log(fileContents);
-});
