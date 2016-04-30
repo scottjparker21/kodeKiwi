@@ -229,8 +229,7 @@ $( "#editor" ).on( "keyup",sendCode);
   }
 
   socket.on('new code', function (data) {
-      console.log(data);
-      editor.setValue(data.code);
+    console.log("receiving code");
   });
 
   //chat events
