@@ -246,16 +246,30 @@ $(function() {
 
 
 
-
   $( "#button" ).on("click", pullFile);
 
   function pullFile() {
     console.log("pulling file");
-    socket.emit('pull file', data);
+<<<<<<< HEAD
   
+    socket.emit('pull file', {
+      reponame : "kodeKiwi",
+      file : "chat/README.md",
+      username: "scottjparker21"
+    });
+  
+=======
+    socket.emit('pull file', {});
+>>>>>>> origin/master
   }
 
 
+  //$( "#push" ).on("click", pushFile);
+
+ /* function pushFile() {
+    console.log("pushing file");
+    socket.emit('push file', {});
+  }*/
 
 
 
@@ -323,9 +337,11 @@ $(function() {
 
   //pulls file from git when server emits 'pull file'
   socket.on('new git', function (data) {
+    console.log(data);
     console.log("pulling file from server");
     editor.setValue(data.file);
   })
+
 
   // Whenever the server emits 'typing', show the typing message
   socket.on('typing', function (data) {
