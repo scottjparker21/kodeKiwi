@@ -246,21 +246,12 @@ $(function() {
 
 
 
+
   $( "#button" ).on("click", pullFile);
 
   function pullFile() {
     console.log("pulling file");
-<<<<<<< HEAD
-  
-    socket.emit('pull file', {
-      reponame : "kodeKiwi",
-      file : "chat/README.md",
-      username: "scottjparker21"
-    });
-  
-=======
     socket.emit('pull file', {});
->>>>>>> origin/master
   }
 
 
@@ -295,7 +286,7 @@ $(function() {
   socket.on('login', function (data) {
     connected = true;
     // Display the welcome message
-    var message = "Welcome to Socket.IO Chat – ";
+    var message = "Welcome to Socket.IO Chat ñ ";
     log(message, {
       prepend: true
     });
@@ -337,7 +328,6 @@ $(function() {
 
   //pulls file from git when server emits 'pull file'
   socket.on('new git', function (data) {
-    console.log(data);
     console.log("pulling file from server");
     editor.setValue(data.file);
   })

@@ -6,8 +6,6 @@ var io = require('socket.io').listen(server);
 var port = process.env.PORT || 3000;
 var Github = require('github-api');
 
-<<<<<<< HEAD
-=======
 var username = "scottjparker21";
 var reponame = "kodeKiwi";
 var email = "scottjparker21@gmail.com";
@@ -18,7 +16,6 @@ var options = {
   'commmitter':{'name': author, 'email': email}
 }
 
->>>>>>> origin/master
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
 });
@@ -85,33 +82,18 @@ io.on('connection', function (socket) {
 
 
 
-<<<<<<< HEAD
-  socket.on('pull file', function(data) {
-    console.log('backend worddd');
-
-=======
   socket.on('pull file', function() {
->>>>>>> origin/master
     var github = new Github({
       'token' : "ba26df95ccddf03e066259d517a44e0763a3f052",
       'auth' : "oauth"
     });
 
-<<<<<<< HEAD
-    var repo = github.getRepo(data.username, data.reponame);
-
-    repo.read('master', data.file, function(err, data) {
-      //console.log('in repo.read');
-      //console.log(data);
-      //console.log(err);
-=======
     var repo = github.getRepo(username, reponame);
 
     repo.read('master', 'chat/public/index.html', function(err, data) {
       console.log(data);
       console.log("this is the data")
       console.log(err);
->>>>>>> origin/master
 
       io.sockets.emit('new git', {
         file : data
@@ -160,37 +142,3 @@ io.on('connection', function (socket) {
   });
 });
 
-<<<<<<< HEAD
-
-
-
-
-
-//api.js from initial test
-//------------------------
-
-
-
-//create rep object
-//var repo = github.getRepo(username, reponame);
-
-//set the changes you want to make
-// var branchToModiy = 'master';
-// var fileToModify = 'github/index.html';
-// var fileContents = 'asdasdasdasdasdasdasdasdasdasdasdasdasdasd';
-// var commitMsg = 'attempting to change';
-
-//write the changes to Github
-// repo.write(branchToModiy, fileToModify, fileContents, commitMsg, options, function(err) {});
-
-//reads file from github
-/*
-repo.read('master', 'github/index.html', function(err, data) {
-  var fileContents = data;
-  console.log(data);
-  document.getElementById("#editor").innerHTML = fileContents;
-  console.log(fileContents);
-});
-*/
-=======
->>>>>>> origin/master
