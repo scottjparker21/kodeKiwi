@@ -10,6 +10,7 @@ var username = "scottjparker21";
 var reponame = "kodeKiwi";
 var email = "scottjparker21@gmail.com";
 var author = "Scott Parker";
+var oauthToken = "";
 var options = {
   'author':{'name': author, 'email': email},
   'commmitter':{'name': author, 'email': email}
@@ -94,6 +95,7 @@ io.on('connection', function (socket) {
   socket.on('pull user repo', function (data) {
     console.log(data);
     var github = new Github({
+      'token' : "",
       'auth' : "oauth"
     });
 
@@ -114,6 +116,7 @@ io.on('connection', function (socket) {
 
   socket.on('pull file', function() {
     var github = new Github({
+      'token' : "",
       'auth' : "oauth"
     });
 
