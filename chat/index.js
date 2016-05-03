@@ -10,11 +10,11 @@ var username = "scottjparker21";
 var reponame = "kodeKiwi";
 var email = "scottjparker21@gmail.com";
 var author = "Scott Parker";
-var oauthToken = "5ceb2ec5187c0f8c8c2cbe321461dbd6964e10c9";
 var options = {
   'author':{'name': author, 'email': email},
   'commmitter':{'name': author, 'email': email}
-}
+};
+
 
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
@@ -40,12 +40,16 @@ io.on('connection', function (socket) {
     });
   });
 
+
+  //when the client emits 'new code', this listens and executes
   socket.on('new code', function (data) {
     console.log(data);
     socket.broadcast.emit('new code', {
       code : data
     });
   });
+
+
 
   // when the client emits 'add user', this listens and executes
   socket.on('add user', function (username) {
@@ -82,9 +86,34 @@ io.on('connection', function (socket) {
 
 
 
+
+
+
+
+  //when the client emits 'pull user repo', this listens and executes
+  socket.on('pull user repo', function (data) {
+    console.log(data);
+    var github = new Github({
+      'auth' : "oauth"
+    });
+
+    var user = github.getUser(data);
+
+    user.getRepos(function(err, repos) {
+      console.log(repos);
+      io.sockets.emit('display repos', {
+        data : repos
+      });
+    });
+  });
+
+
+
+
+
+
   socket.on('pull file', function() {
     var github = new Github({
-      'token' : "ba26df95ccddf03e066259d517a44e0763a3f052",
       'auth' : "oauth"
     });
 
@@ -92,7 +121,6 @@ io.on('connection', function (socket) {
 
     repo.read('master', 'chat/public/index.html', function(err, data) {
       console.log(data);
-      console.log("this is the data")
       console.log(err);
 
       io.sockets.emit('new git', {
@@ -141,4 +169,3 @@ io.on('connection', function (socket) {
     }
   });
 });
-
