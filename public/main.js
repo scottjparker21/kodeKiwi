@@ -245,6 +245,19 @@ $(function() {
   } 
 
 
+  $( "#search").on( "click", function() {
+    var text = $("#gitUserRepo").val();
+    //console.log(text);
+    //var text = $( "#gitUserRepo" ).text();
+    pullUserRepo(text);
+  });
+
+  function pullUserRepo(data) {
+    var gitUserName = data;
+    console.log(gitUserName);
+    socket.emit("pull user repo", gitUserName);
+  }
+
 
 
   $( "#button" ).on("click", pullFile);
@@ -330,7 +343,21 @@ $(function() {
   socket.on('new git', function (data) {
     console.log("pulling file from server");
     editor.setValue(data.file);
-  })
+  });
+
+
+
+  // pulls repo names from selected git user
+  socket.on('display repos', function (data) {
+    console.log("pulling repos from server");
+    console.log(data);
+    console.log(data[0]);
+    //document.getElementById("#list").innerHTML = (data.array[0].);
+  });
+
+
+
+
 
 
   // Whenever the server emits 'typing', show the typing message
