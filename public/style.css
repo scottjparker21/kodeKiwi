@@ -154,3 +154,7 @@ ul {
   right: 0;
   width: 100%;
 }
+
+#list {
+  margin-left: 25px;
+}
