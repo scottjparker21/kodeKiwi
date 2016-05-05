@@ -40,7 +40,6 @@ $(function() {
   // Sets the client's username
   function setUsername () {
     username = cleanInput($usernameInput.val().trim());
-
     // If the username is valid
     if (username) {
       $loginPage.fadeOut();
@@ -52,10 +51,6 @@ $(function() {
       socket.emit('add user', username);
     }
   }
-
-
-
-
 /*  function setGithubUser () {
     gitUser = cleanInput($gitUsernameInput.val().trim());
 
@@ -70,10 +65,6 @@ $(function() {
       socket.emit('find gitUser', gitUser);
     }
   }*/
-
-
-
-
 
   // Sends a chat message
   function sendMessage () {
@@ -213,7 +204,6 @@ $(function() {
   }
 
   // Keyboard events
-
   $window.keydown(function (event) {
     if ($("input.inputMessage").is(":focus") || $("input.usernameInput").is(":focus")) {
       // Auto-focus the current input when a key is typed
@@ -254,8 +244,6 @@ $(function() {
 
   function pullUserRepo(data) {
     var gitUsername = data;
-    console.log(gitUsername);
-
     function request() {  
       return $.ajax({
         type : 'GET',
@@ -263,15 +251,13 @@ $(function() {
         cache : 'false',
         url: "https://api.github.com/users/"+gitUsername+"/repos",
         success: function(response) {
-          $('#list').append('<div class="row">');
-          console.log(response);
-          $.each(response.data, function(key, value){
-            console.log(value['name']);
-            console.log(value['url']);
-            console.log(value['id']);
-            $('#list').append('<div class="row"><button class="select" value="'+value['id']+'" type="submit">'+ value['name']+'</button></div>');
-          });
-          $('#list').append('</div>');
+          var dropdown = '<select id="repoOptions">';
+          // console.log(response);
+            $.each(response.data, function(key, value){
+              dropdown += '<option value="' + value.name + '">' + value.name + '</option>';
+            });
+              dropdown += '</option>';
+              $('#list').append(dropdown);     
         }
       });
     }
@@ -279,17 +265,18 @@ $(function() {
     //socket.emit("pull user repo", gitUserName);
   }
 
-
-  $( "#list" ).on( "click", function() {
-    alert($(this).val());
-    //var text = $("#list").val();
-    //console.log(text);
-    //pullfile(text);
+  $('#repoOptions').change(function() {
+      console.log('changed');
+      alert($(this).val());
   });
 
+  // $( "#list" ).on( "click", function() {
+  //   alert($(this).val());
 
-
-
+  //   var text = $("#list").val();
+  //   console.log(text);
+  //   pullfile(text);
+  // });
 
   $( "#button" ).on("click", pullFile);
 
@@ -297,8 +284,6 @@ $(function() {
     console.log("pulling file");
     socket.emit('pull file', {});
   }
-
-
   //$( "#push" ).on("click", pushFile);
 
  /* function pushFile() {
@@ -306,14 +291,11 @@ $(function() {
     socket.emit('push file', {});
   }*/
 
-
-
   $inputMessage.on('input', function() {
     updateTyping();
   });
 
   // Click events
-
   // Focus input when clicking anywhere on login page
   $loginPage.click(function () {
     $currentInput.focus();
@@ -325,7 +307,6 @@ $(function() {
   });
 
   // Socket events
-
   // Whenever the server emits 'login', log the login message
   socket.on('login', function (data) {
     connected = true;
@@ -336,15 +317,6 @@ $(function() {
     });
     addParticipantsMessage(data);
   });
-
-
-
-/*  socket.on('repoAccess', function (data) {
-    connected = true;
-    var message = "Welcome to " + data + "'s Github";
-  });*/
-
-
 
   // Whenever the server emits 'new message', update the chat body
   socket.on('new message', function (data) {
@@ -369,48 +341,11 @@ $(function() {
     editor.setValue(data.code);
   });
 
-
   //pulls file from git when server emits 'pull file'
   socket.on('new git', function (data) {
     console.log("pulling file from server");
     editor.setValue(data.file);
   });
-
-
-
-  // pulls repo names from selected git user
-/*  socket.on('display repos', function (gitUsername, data) {
-    console.log("pulling repos from server");
-    var gitUsername = gitUsername;
-    console.log(gitUsername);
-    function request() {  
-      return $.ajax({
-        type : 'GET',
-        dataType : 'jsonp',
-        cache : 'false',
-        url: "https://api.github.com/users/"+gitUsername+"/repos",
-        success: function(response) {
-          $('#list').append('<div class="row">');
-          $.each(response, function(key, value){
-            console.log(value);
-            $('#list').append('<div class="row"><p>' + value[0] +'<p></a><h3>' + value.collectionName + '</h3><h5>' + value.releaseDate.slice(0,4) + '</h5></div>');
-            cover image, name, release year
-          });
-          $('#app').append('</div>');
-        }
-      })
-    }
-    $(document).ready(request);
-
-    console.log(data);
-    console.log(data[0]);
-    document.getElementById("#list").innerHTML = (data.array[0].);
-  });
-*/
-
-
-
-
 
   // Whenever the server emits 'typing', show the typing message
   socket.on('typing', function (data) {
@@ -422,3 +357,66 @@ $(function() {
     removeChatTyping(data);
   });
 });
+
+//Controllers ---------------------------------------------->
+
+    // create the module and named it kodeKiwiApp
+    // also include ngRoute for all our routing needs
+var kodeKiwiApp = angular.module('kodeKiwiApp', ['ngRoute']);
+    // create the module and name it scotchApp
+    // configure our routes
+    kodeKiwiApp.config(function($routeProvider) {
+        $routeProvider
+              // route for the home page
+            .when('/', {
+                templateUrl : 'pages/login.html',
+                controller  : 'mainController'
+            })
+            // route for the editor and chat page
+            .when('/editor', {
+                templateUrl : 'pages/editor.html',
+                controller  : 'pagesController'
+            })
+            // route for the stats page
+            .when('/stats', {
+                templateUrl : 'pages/stats.html',
+                controller  : 'statController'
+            });
+    });
+    // Using these controllers for testing purposed atm.
+    // create the controller and inject Angular's $scope
+    kodeKiwiApp.controller('mainController', function($scope) {
+        // create a message to display in our view
+        $scope.message = 'awesome login page...someday';
+    });
+
+    kodeKiwiApp.controller('pagesController', function($scope) {
+        $scope.message = 'dope chat/code editor page.';
+    });
+
+    kodeKiwiApp.controller('statController', function($scope) {
+        $scope.message = 'mint statistics page.';
+    });
+
+
+//End Controllers ----------------------------------------->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

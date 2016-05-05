@@ -10,7 +10,7 @@ var username = "scottjparker21";
 var reponame = "kodeKiwi";
 var email = "scottjparker21@gmail.com";
 var author = "Scott Parker";
-var oauthToken = "c58aef5b935646fffc952726c5601aa0f1e02a44";
+var oauthToken = "e59cbe790a1fffc2ab6de2948b896761ddac443c";
 var options = {
   'author':{'name': author, 'email': email},
   'commmitter':{'name': author, 'email': email}
@@ -41,7 +41,6 @@ io.on('connection', function (socket) {
     });
   });
 
-
   //when the client emits 'new code', this listens and executes
   socket.on('new code', function (data) {
     console.log(data);
@@ -49,8 +48,6 @@ io.on('connection', function (socket) {
       code : data
     });
   });
-
-
 
   // when the client emits 'add user', this listens and executes
   socket.on('add user', function (username) {
@@ -84,40 +81,9 @@ io.on('connection', function (socket) {
     });
   });
 
-
-
-
-
-
-
-
-  //when the client emits 'pull user repo', this listens and executes
-/*  socket.on('pull user repo', function (data) {
-    console.log(data);
-    var gitUsername = data
-    var github = new Github({
-      'token' : "1be8e9e4d93624602e0d36fcc32991d90edd1ccd",
-      'auth' : "oauth"
-    });
-
-    var user = github.getUser(data);
-
-    user.getRepos(function(err, repos) {
-      console.log(repos);
-      io.sockets.emit('display repos', gitUsername, {
-        data : repos
-      });
-    });
-  });*/
-
-
-
-
-
-
   socket.on('pull file', function() {
     var github = new Github({
-      'token' : "c58aef5b935646fffc952726c5601aa0f1e02a44",
+      'token' : "e59cbe790a1fffc2ab6de2948b896761ddac443c",
       'auth' : "oauth"
     });
     var repo = github.getRepo(username, reponame);
@@ -130,31 +96,6 @@ io.on('connection', function (socket) {
       });
     });
   });
-
-
-/*  socket.on('push file', function(){
-    var branchToModiy = 'master';
-    var fileToModify = 'chat/public/dummy.html';
-    var fileContents = 'this is an attempt to push to the dummy file';
-    var commitMsg = 'attempting to change dummy file';
-
-    var github = new Github({
-      'token' : "ba26df95ccddf03e066259d517a44e0763a3f052",
-      'auth' : "oauth"
-    });
-
-    var repo = github.getRepo(username, reponame);
-
-    repo.write(branchToModiy, fileToModify, fileContents, commitMsg, options, function(err) {
-      console.log(data);    
-      io.sockets.emit('new push', {
-        file : data
-      });
-    });
-  });*/
-
-
-
 
   // when the user disconnects.. perform this
   socket.on('disconnect', function () {
