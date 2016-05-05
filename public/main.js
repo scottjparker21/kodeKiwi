@@ -237,13 +237,12 @@ $(function() {
   
   function sendCode() {
     var code = editor.getValue();
-    console.log("getting input");
+    //console.log("getting input");
     if (connected) {
-        console.log("emitting input");
+        //console.log("emitting input");
         socket.emit('new code', code);
     }
   } 
-
 
   $( "#search").on( "click", function() {
     var text = $("#gitUserRepo").val();
@@ -251,11 +250,9 @@ $(function() {
     //var text = $( "#gitUserRepo" ).text();
     pullUserRepo(text);
   });
-
+ 
   function pullUserRepo(data) {
     var gitUsername = data;
-    console.log(gitUsername);
-
     function request() {  
       return $.ajax({
         type : 'GET',
@@ -263,39 +260,64 @@ $(function() {
         cache : 'false',
         url: "https://api.github.com/users/"+gitUsername+"/repos",
         success: function(response) {
-          $('#list').append('<div class="row">');
-          console.log(response);
+          var dropdown = '<select id="selection">';
+          // console.log(response);
           $.each(response.data, function(key, value){
-            console.log(value['name']);
-            console.log(value['url']);
-            console.log(value['id']);
-            $('#list').append('<div class="row"><button class="select" value="'+value['id']+'" type="submit">'+ value['name']+'</button></div>');
+            dropdown += '<option value="' + value.name + '">' + value.name + '</option>';
           });
-          $('#list').append('</div>');
+          dropdown += '</select>&nbsp;&nbsp;';
+          $('#list').append(dropdown);     
         }
       });
     }
     $(document).ready(request);
-    //socket.emit("pull user repo", gitUserName);
+    //return gitUsername;
   }
 
-
-  $( "#list" ).on( "click", function() {
-    alert($(this).val());
-    //var text = $("#list").val();
-    //console.log(text);
-    //pullfile(text);
+  $("#selectRepository").on("click", function() {
+    //console.log("clicked button");
+    var files = $('#selection').val()
+    //console.log(files);
+    pullRepoContents(files);
   });
 
+  function pullRepoContents(data) {
+    //var text = $("#gitUserRepo").val(); 
+    //var githubUsername = pullUserRepo(text);
+    //console.log(githubUsername);
+    var repoName = data;
+    console.log(repoName);
+    function request() {
+      return $.ajax({
+        type : 'GET',
+        dataType : 'jsonp',
+        cache : 'false',
+        url : "https://api.github.com/repos/motlj/"+repoName+"/contents",
+        success: function(response) {
+          var fileDropdown = '<select id="fileSelect">';
+          $.each(response.data, function(key, value){
+            fileDropdown += '<option value="' + value.path + '">' + value.name + '</option>';
+          });
+          fileDropdown += '</select>&nbsp;&nbsp;';
+          $('#fileList').append(fileDropdown);
+        }
+      });
+    }
+    $(document).ready(request);
+  }
 
+  $( "#selectFile" ).on("click", function(){
+    var file = $('#fileSelect').val();
+    pullFile(file);
+  });
 
-
-
-  $( "#button" ).on("click", pullFile);
-
-  function pullFile() {
-    console.log("pulling file");
-    socket.emit('pull file', {});
+  function pullFile(data) {
+    //console.log("pulling file");
+    //console.log(data);
+    var pulledfile = data;
+    //editor.setValue(data);
+    //console.log("pulling file");
+    socket.emit('pull file', pulledfile);
   }
 
 

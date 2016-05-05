@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -40,14 +40,34 @@
       <br>
       <br>
       <div id="list">
-        <!--<button id="list" type="submit">Select</button>-->
       </div>
+      <div>
+        <strong><p id="selectedRepo"></p></strong><button id="selectRepository" type="button" onclick="selectRepo()">Select Repo!</button>
+      </div>
+      <div id="fileList">
+      </div>
+      <div>
+        <strong><p id="selectedFile"></p></strong><button type="button" id="selectFile" onclick="selectFile()">Select File!</button>
+      </div>
+
+      <div>      
         <pre class="pages" id="editor">
         </pre>
       </div>
     </div>
   </div>
 
+  <script>
+    function selectRepo() {
+      var value = document.getElementById("selection").value;
+      document.getElementById("selectedRepo").innerHTML = value;
+    }
+
+    function selectFile() {
+      var file = document.getElementById("fileSelect").value;
+      document.getElementById("selectedFile").innerHTML = file;
+    }
+  </script>
 
   <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
