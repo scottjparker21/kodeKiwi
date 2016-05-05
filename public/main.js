@@ -253,10 +253,41 @@ $(function() {
   });
 
   function pullUserRepo(data) {
-    var gitUserName = data;
-    console.log(gitUserName);
-    socket.emit("pull user repo", gitUserName);
+    var gitUsername = data;
+    console.log(gitUsername);
+
+    function request() {  
+      return $.ajax({
+        type : 'GET',
+        dataType : 'jsonp',
+        cache : 'false',
+        url: "https://api.github.com/users/"+gitUsername+"/repos",
+        success: function(response) {
+          $('#list').append('<div class="row">');
+          console.log(response);
+          $.each(response.data, function(key, value){
+            console.log(value['name']);
+            console.log(value['url']);
+            console.log(value['id']);
+            $('#list').append('<div class="row"><button class="select" value="'+value['id']+'" type="submit">'+ value['name']+'</button></div>');
+          });
+          $('#list').append('</div>');
+        }
+      });
+    }
+    $(document).ready(request);
+    //socket.emit("pull user repo", gitUserName);
   }
+
+
+  $( "#list" ).on( "click", function() {
+    alert($(this).val());
+    //var text = $("#list").val();
+    //console.log(text);
+    //pullfile(text);
+  });
+
+
 
 
 
@@ -348,13 +379,34 @@ $(function() {
 
 
   // pulls repo names from selected git user
-  socket.on('display repos', function (data) {
+/*  socket.on('display repos', function (gitUsername, data) {
     console.log("pulling repos from server");
+    var gitUsername = gitUsername;
+    console.log(gitUsername);
+    function request() {  
+      return $.ajax({
+        type : 'GET',
+        dataType : 'jsonp',
+        cache : 'false',
+        url: "https://api.github.com/users/"+gitUsername+"/repos",
+        success: function(response) {
+          $('#list').append('<div class="row">');
+          $.each(response, function(key, value){
+            console.log(value);
+            $('#list').append('<div class="row"><p>' + value[0] +'<p></a><h3>' + value.collectionName + '</h3><h5>' + value.releaseDate.slice(0,4) + '</h5></div>');
+            cover image, name, release year
+          });
+          $('#app').append('</div>');
+        }
+      })
+    }
+    $(document).ready(request);
+
     console.log(data);
     console.log(data[0]);
-    //document.getElementById("#list").innerHTML = (data.array[0].);
+    document.getElementById("#list").innerHTML = (data.array[0].);
   });
-
+*/
 
 
 
