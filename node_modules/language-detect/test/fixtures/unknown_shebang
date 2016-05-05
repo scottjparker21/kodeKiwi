@@ -1,6 +1,0 @@
-#!/usr/bin/env unknown
-
-composure_keywords ()
-{
-    echo "about author example group param version"
-}
