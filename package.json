@@ -1,5 +1,5 @@
 {
-  "name": "Kode Kiwi",
+  "name": "kodeKiwi",
   "version": "0.0.0",
   "description": "A Collaborative Coding Application",
   "main": "index.js",
@@ -13,6 +13,7 @@
   "dependencies": {
     "express": "4.13.4",
     "github-api": "^1.0.0",
+    "ejs": "2.4.1",
     "socket.io": "^1.4.5"
   },
    "engines": {
