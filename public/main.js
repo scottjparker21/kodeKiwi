@@ -13,7 +13,6 @@ $(function() {
   //var $gitUsernameInput = $('.gitUsernameInput')
   var $messages = $('.messages'); // Messages area
   var $inputMessage = $('.inputMessage'); // Input message input box
-
   var $loginPage = $('.login.page'); // The login page
   var $chatPage = $('.chat.page'); // The chatroom page
 
@@ -39,7 +38,7 @@ $(function() {
 
   // Sets the client's username
   function setUsername () {
-    username = cleanInput($usernameInput.val().trim());
+    username = cleanInput($('.usernameInput').val().trim());
     // If the username is valid
     if (username) {
       $loginPage.fadeOut();
@@ -134,6 +133,7 @@ $(function() {
   // options.prepend - If the element should prepend
   //   all other messages (default = false)
   function addMessageElement (el, options) {
+    $messages = $('.messages');
     var $el = $(el);
 
     // Setup default options
@@ -383,6 +383,8 @@ var kodeKiwiApp = angular.module('kodeKiwiApp', ['ngRoute']);
                 controller  : 'statController'
             });
     });
+
+
     // Using these controllers for testing purposed atm.
     // create the controller and inject Angular's $scope
     kodeKiwiApp.controller('mainController', function($scope) {
