@@ -362,10 +362,10 @@ $(function() {
 
     // create the module and named it kodeKiwiApp
     // also include ngRoute for all our routing needs
-var kodeKiwiApp = angular.module('kodeKiwiApp', ['ngRoute']);
+var kodeKiwiApp = angular.module('kodeKiwiApp', ['ngRoute','satellizer']);
     // create the module and name it scotchApp
     // configure our routes
-    kodeKiwiApp.config(function($routeProvider) {
+    kodeKiwiApp.config(function($routeProvider,$authProvider) {
         $routeProvider
               // route for the home page
             .when('/', {
@@ -382,6 +382,11 @@ var kodeKiwiApp = angular.module('kodeKiwiApp', ['ngRoute']);
                 templateUrl : 'pages/stats.html',
                 controller  : 'statController'
             });
+            //for github oauth
+            $authProvider.github({
+              clientId: 'GitHub Client ID'
+            });
+
     });
 
 
@@ -400,6 +405,11 @@ var kodeKiwiApp = angular.module('kodeKiwiApp', ['ngRoute']);
         $scope.message = 'mint statistics page.';
     });
 
+    kodeKiwiApp.controller('LoginCtrl', function($scope, $auth) {
+      $scope.authenticate = function(provider) {
+        $auth.authenticate(provider);  
+      };
+    });
 
 //End Controllers ----------------------------------------->
 
