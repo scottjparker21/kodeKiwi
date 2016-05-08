@@ -1,10 +1,10 @@
 // Setup basic express server
-var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io').listen(server);
-// var port = process.env.PORT || 3000;
-var Github = require('github-api');
+// var express = require('express');
+// var app = express();
+// var server = require('http').createServer(app);
+// var io = require('socket.io').listen(server);
+// // var port = process.env.PORT || 3000;
+// var Github = require('github-api');
 
 var username = "scottjparker21";
 var reponame = "kodeKiwi";
@@ -21,6 +21,17 @@ var options = {
 // });
 
 //trouble shooting heroku server here ---------->
+var express = require('express'),
+  app = express(),
+  server = require('http').createServer(app),
+  io = require('socket.io').listen(server),
+
+server.listen(process.env.PORT || 3000);
+//testing new socket set up below
+io.socket.on('connection', function(socket){ 
+    console.log('everything is happening');
+
+
 // app.set('port', (process.env.PORT || 5000));
 
 // Routing
@@ -134,3 +145,4 @@ io.on('connection', function (socket) {
     }
   });
 });
+});//closing tag for io.sockets.on testing
