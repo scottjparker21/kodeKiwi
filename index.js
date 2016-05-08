@@ -10,7 +10,6 @@ var username = "scottjparker21";
 var reponame = "kodeKiwi";
 var email = "scottjparker21@gmail.com";
 var author = "Scott Parker";
-var oauthToken = "e59cbe790a1fffc2ab6de2948b896761ddac443c";
 var options = {
   'author':{'name': author, 'email': email},
   'commmitter':{'name': author, 'email': email}
@@ -83,6 +82,40 @@ io.on('connection', function (socket) {
   socket.on('pull file', function() {
     var github = new Github({
       'token' : "e59cbe790a1fffc2ab6de2948b896761ddac443c",
+
+
+
+
+
+
+
+
+  //when the client emits 'pull user repo', this listens and executes
+  socket.on('pull user repo', function (data) {
+    console.log(data);
+    var github = new Github({
+      'token' : "e7efbc26a6e2156a8f5bdd115e36f9411891b8a6",
+      'auth' : "oauth"
+    });
+
+    var user = github.getUser(data);
+
+    user.getRepos(function(err, repos) {
+      console.log(repos);
+      io.sockets.emit('display repos', {
+        data : repos
+      });
+    });
+  });
+
+
+
+
+
+
+  socket.on('pull file', function() {
+    var github = new Github({
+      'token' : "e7efbc26a6e2156a8f5bdd115e36f9411891b8a6",
       'auth' : "oauth"
     });
     var repo = github.getRepo(username, reponame);
