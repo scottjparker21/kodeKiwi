@@ -1,0 +1,8 @@
+{
+  "oauth_client_id": "kode_kiwi!1",
+  "oauth_client_secret": "kiwibirds!1",
+  "oauth_host": "github.com",
+  "oauth_port": 443,
+  "oauth_path": "/login/oauth/access_token",
+  "oauth_method": "POST"
+}

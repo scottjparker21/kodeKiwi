@@ -1,8 +1,0 @@
-{
-  "name": "KodeKiwi",
-  "description": "A collaborative coding web application",
-  "repository": "https://github.com/scottjparker21/kodeKiwi.git",
-  // "logo": "http://node-js-sample.herokuapp.com/node.svg",
-  "keywords": ["node", "express", "static"]
-  // "image": "heroku/nodejs"
-}
