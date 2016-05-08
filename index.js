@@ -1,9 +1,9 @@
-Setup basic express server
+//Setup basic express server
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
-// var port = process.env.PORT || 3000;
+var port = process.env.PORT || 3000;
 var Github = require('github-api');
 
 var username = "scottjparker21";
@@ -22,14 +22,16 @@ var options = {
 
 //trouble shooting heroku server here ---------->
 
-// app.set('port', (process.env.PORT || 5000));
+app.set('port', (process.env.PORT || 5000));
 
 // Routing
 app.use(express.static(__dirname + '/public'));
 
 // views is directory for all template files
 app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+
+//not using ejs may need to change view engine
+// app.set('view engine', 'ejs');
 
 app.get('/', function(request, response) {
   response.render('pages/index');
