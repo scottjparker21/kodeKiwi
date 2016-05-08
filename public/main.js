@@ -362,10 +362,10 @@ $(function() {
 
     // create the module and named it kodeKiwiApp
     // also include ngRoute for all our routing needs
-var kodeKiwiApp = angular.module('kodeKiwiApp', ['ngRoute','satellizer']);
+var kodeKiwiApp = angular.module('kodeKiwiApp', ['ngRoute']);
     // create the module and name it scotchApp
     // configure our routes
-    kodeKiwiApp.config(function($routeProvider,$authProvider) {
+    kodeKiwiApp.config(function($routeProvider) {
         $routeProvider
               // route for the home page
             .when('/', {
@@ -383,9 +383,62 @@ var kodeKiwiApp = angular.module('kodeKiwiApp', ['ngRoute','satellizer']);
                 controller  : 'statController'
             });
             //for github oauth
-            $authProvider.github({
-              clientId: 'GitHub Client ID'
-            });
+    angular.module('kodeKiwiApp', ['satellizer'])
+      .config(function($authProvider) {
+
+        $authProvider.facebook({
+          clientId: 'Facebook App ID'
+        });
+
+        // Optional: For client-side use (Implicit Grant), set responseType to 'token'
+        $authProvider.facebook({
+          clientId: 'Facebook App ID',
+          responseType: 'token'
+        });
+
+        $authProvider.google({
+          clientId: 'Google Client ID'
+        });
+
+        $authProvider.github({
+          clientId: 'GitHub Client ID'
+        });
+
+        $authProvider.linkedin({
+          clientId: 'LinkedIn Client ID'
+        });
+
+        $authProvider.instagram({
+          clientId: 'Instagram Client ID'
+        });
+
+        $authProvider.yahoo({
+          clientId: 'Yahoo Client ID / Consumer Key'
+        });
+
+        $authProvider.live({
+          clientId: 'Microsoft Client ID'
+        });
+
+        $authProvider.twitch({
+          clientId: 'Twitch Client ID'
+        });
+
+        $authProvider.bitbucket({
+          clientId: 'Bitbucket Client ID'
+        });
+
+        // No additional setup required for Twitter
+
+        $authProvider.oauth2({
+          name: 'foursquare',
+          url: '/auth/foursquare',
+          clientId: 'Foursquare Client ID',
+          redirectUri: window.location.origin,
+          authorizationEndpoint: 'https://foursquare.com/oauth2/authenticate',
+        });
+
+      });
 
     });
 
@@ -406,11 +459,12 @@ var kodeKiwiApp = angular.module('kodeKiwiApp', ['ngRoute','satellizer']);
     });
 
     kodeKiwiApp.controller('LoginCtrl', function($scope, $auth) {
-      $scope.authenticate = function(provider) {
-        $auth.authenticate(provider);  
-      };
-    });
 
+      $scope.authenticate = function(provider) {
+        $auth.authenticate(provider);
+      };
+
+    });
 //End Controllers ----------------------------------------->
 
 
