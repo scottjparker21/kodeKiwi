@@ -1,9 +1,9 @@
 Setup basic express server
 var express = require('express');
 var app = express();
-var server = require('http').createServer(app).listen(process.env.PORT || 8080);
+var server = require('http').createServer(app).listen(process.env.PORT || 3000);
 var io = require('socket.io').listen(server);
-// var port = process.env.PORT || 3000;
+var port = process.env.PORT || 3000;
 var Github = require('github-api');
 
 var username = "scottjparker21";
@@ -28,21 +28,21 @@ var options = {
 app.use(express.static(__dirname + '/public'));
 
 // views is directory for all template files
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+// app.set('views', __dirname + '/views');
+// app.set('view engine', 'ejs');
 
-app.get('/', function(request, response) {
-  response.render('pages/index');
-});
-
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
-});
-
-
-// server.listen(port, function () {
-//   console.log('Server listening at port %d', port);
+// app.get('/', function(request, response) {
+//   response.render('pages/index');
 // });
+
+// app.listen(app.get('port'), function() {
+//   console.log('Node app is running on port', app.get('port'));
+// });
+
+
+server.listen(port, function () {
+  console.log('Server listening at port %d', port);
+});
 
 
 
