@@ -358,7 +358,6 @@ $(function() {
   });
 });
 
-<<<<<<< Updated upstream
 //Controllers ---------------------------------------------->
 
     // create the module and named it kodeKiwiApp
@@ -478,14 +477,4 @@ var kodeKiwiApp = angular.module('kodeKiwiApp', ['ngRoute']);
 
 
 
-
-
-
-
-
-
-
-
-=======
->>>>>>> Stashed changes
 
