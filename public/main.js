@@ -383,63 +383,6 @@ var kodeKiwiApp = angular.module('kodeKiwiApp', ['ngRoute']);
                 controller  : 'statController'
             });
             //for github oauth
-    angular.module('kodeKiwiApp', ['satellizer'])
-      .config(function($authProvider) {
-
-        $authProvider.facebook({
-          clientId: 'Facebook App ID'
-        });
-
-        // Optional: For client-side use (Implicit Grant), set responseType to 'token'
-        $authProvider.facebook({
-          clientId: 'Facebook App ID',
-          responseType: 'token'
-        });
-
-        $authProvider.google({
-          clientId: 'Google Client ID'
-        });
-
-        $authProvider.github({
-          clientId: 'GitHub Client ID'
-        });
-
-        $authProvider.linkedin({
-          clientId: 'LinkedIn Client ID'
-        });
-
-        $authProvider.instagram({
-          clientId: 'Instagram Client ID'
-        });
-
-        $authProvider.yahoo({
-          clientId: 'Yahoo Client ID / Consumer Key'
-        });
-
-        $authProvider.live({
-          clientId: 'Microsoft Client ID'
-        });
-
-        $authProvider.twitch({
-          clientId: 'Twitch Client ID'
-        });
-
-        $authProvider.bitbucket({
-          clientId: 'Bitbucket Client ID'
-        });
-
-        // No additional setup required for Twitter
-
-        $authProvider.oauth2({
-          name: 'foursquare',
-          url: '/auth/foursquare',
-          clientId: 'Foursquare Client ID',
-          redirectUri: window.location.origin,
-          authorizationEndpoint: 'https://foursquare.com/oauth2/authenticate',
-        });
-
-      });
-
     });
 
 
