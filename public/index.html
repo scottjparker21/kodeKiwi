@@ -113,10 +113,17 @@ function add(x,y) {
   console.log(cursor.row);
   console.log(cursor.column);
 
+  
+
    
   //var range = new Range(4, 0, 30, 0);
 
-  var range;
+  var range = new Range();
+
+   //add anchors to range
+    range.start  = session.doc.createAnchor(range.start);
+    range.end    = session.doc.createAnchor(range.end);
+    range.end.$insertRight = true;
 
   if (cursor.row == length - 1) {
     range = new Range(length-26, 0-8,(length-25) + 26, 0-8);
@@ -156,10 +163,6 @@ function add(x,y) {
     before(editor, 'onCut',   preventReadonly);
 
 
-    //add anchors to range
-    range.start  = session.doc.createAnchor(range.start);
-    range.end    = session.doc.createAnchor(range.end);
-    range.end.$insertRight = true;
 
     
     function before(obj, method, wrapper) {
