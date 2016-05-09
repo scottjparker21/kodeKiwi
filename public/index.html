@@ -82,26 +82,7 @@ function add(x,y) {
 function add(x,y) {
   return x+y;
 }
-var x = 5;
-var y = 10;
-function add(x,y) {
-  return x+y;
-}var y = 10;
-function add(x,y) {
-  return x+y;
-}var y = 10;
-function add(x,y) {
-  return x+y;
-}var y = 10;
-function add(x,y) {
-  return x+y;
-}var y = 10;
-function add(x,y) {
-  return x+y;
-}var y = 10;
-function add(x,y) {
-  return x+y;
-}
+
 
         </pre>
       </div>
@@ -121,18 +102,29 @@ function add(x,y) {
     
   var session  = editor.getSession();
 
-  editor.moveCursorTo(4,0);
+  var length = editor.session.getLength();
+  console.log(length);
+
+  editor.moveCursorTo(length, 0-8);
   var cursor = editor.selection.getCursor();
   console.log(cursor);
 
-  //grabs 4 from cursor 
+   
   console.log(cursor.row);
   console.log(cursor.column);
 
    
-  var range = new Range(4, 0, 30, 0);
+  //var range = new Range(4, 0, 30, 0);
 
+  var range;
 
+  if (cursor.row == length - 1) {
+    range = new Range(1, 0, 25, 0);
+  }
+
+  else {
+    range = new Range(1, 0, 1, 0);
+  }
 
   /* range needs to be calculated based onCursor positions */
   //editor.getSession().getSelection().selectionLead.setPosition(2,3);
