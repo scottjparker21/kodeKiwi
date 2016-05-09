@@ -121,16 +121,23 @@ function add(x,y) {
     
   var session  = editor.getSession();
 
-
-   
-  var range    = new Range(4, 0, 30, 0);
-  /* range needs to be calculated based onCursor positions */
-  //editor.getSession().getSelection().selectionLead.setPosition(2,3);
-  editor.moveCursorTo(3,3);
+  editor.moveCursorTo(4,0);
   var cursor = editor.selection.getCursor();
   console.log(cursor);
 
+  //grabs 4 from cursor 
+  console.log(cursor.row);
+  console.log(cursor.column);
 
+   
+  var range = new Range(4, 0, 30, 0);
+
+
+
+  /* range needs to be calculated based onCursor positions */
+  //editor.getSession().getSelection().selectionLead.setPosition(2,3);
+  
+ 
 
 
   var markerId = session.addMarker(range, "readonly-highlight");
