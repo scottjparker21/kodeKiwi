@@ -42,7 +42,67 @@
       <div id="list">
         <!--<button id="list" type="submit">Select</button>-->
       </div>
-        <pre class="pages" id="editor">
+        <pre class="pages" id="editor">var x = 5;
+var y = 10;
+function add(x,y) {
+  return x+y;
+}var y = 10;
+function add(x,y) {
+  return x+y;
+}var y = 10;
+function add(x,y) {
+  return x+y;
+}var y = 10;
+function add(x,y) {
+  return x+y;
+}var y = 10;
+function add(x,y) {
+  return x+y;
+}var y = 10;
+function add(x,y) {
+  return x+y;
+}
+var x = 5;
+var y = 10;
+function add(x,y) {
+  return x+y;
+}var y = 10;
+function add(x,y) {
+  return x+y;
+}var y = 10;
+function add(x,y) {
+  return x+y;
+}var y = 10;
+function add(x,y) {
+  return x+y;
+}var y = 10;
+function add(x,y) {
+  return x+y;
+}var y = 10;
+function add(x,y) {
+  return x+y;
+}
+var x = 5;
+var y = 10;
+function add(x,y) {
+  return x+y;
+}var y = 10;
+function add(x,y) {
+  return x+y;
+}var y = 10;
+function add(x,y) {
+  return x+y;
+}var y = 10;
+function add(x,y) {
+  return x+y;
+}var y = 10;
+function add(x,y) {
+  return x+y;
+}var y = 10;
+function add(x,y) {
+  return x+y;
+}
+
         </pre>
       </div>
     </div>
@@ -55,10 +115,70 @@
   <script src="/main.js"></script>
   <script src="src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
   <script>
-    var editor = ace.edit("editor");
-    var code = editor.getValue();
-    editor.setTheme("ace/theme/chaos");
-    editor.session.setMode("ace/mode/javascript");
+  var Range    = ace.require("ace/range").Range;
+    
+  var editor     = ace.edit("editor");
+    
+  var session  = editor.getSession();
+
+
+   
+  var range    = new Range(5, 0, 30, 0);
+  /* range needs to be calculated based onCursor positions */
+
+
+
+
+  var markerId = session.addMarker(range, "readonly-highlight");
+    
+  /* sets mode mode should be determined via file pulled from github */
+  session.setMode("ace/mode/javascript");
+  editor.setTheme("ace/theme/chaos");
+    
+
+
+//customized key handler function
+    editor.keyBinding.addKeyboardHandler({
+        handleKeyboard : function(data, hash, keyString, keyCode, event) {
+            if (hash === -1 || (keyCode <= 40 && keyCode >= 37)) return false;
+            
+            if (intersects(range)) {
+                return {command:"null", passEvent:false};
+            }
+        }
+    });
+    
+    //prevents copy/paste injection
+    before(editor, 'onPaste', preventReadonly);
+    before(editor, 'onCut',   preventReadonly);
+
+
+    //add anchors to range
+    range.start  = session.doc.createAnchor(range.start);
+    range.end    = session.doc.createAnchor(range.end);
+  //  range.end.$insertRight = true;
+
+    
+    function before(obj, method, wrapper) {
+        var orig = obj[method];
+        obj[method] = function() {
+            var args = Array.prototype.slice.call(arguments);
+            return wrapper.call(this, function(){
+                return orig.apply(obj, args);
+            }, args);
+        }
+        
+        return obj[method];
+    }
+    
+    function intersects(range) {
+        return editor.getSelectionRange().intersects(range);
+    }
+    
+    function preventReadonly(next, args) {
+        if (intersects(range)) return;
+        next();
+    };
   </script>
 </body>
 </html>
