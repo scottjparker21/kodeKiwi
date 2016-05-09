@@ -123,8 +123,12 @@ function add(x,y) {
 
 
    
-  var range    = new Range(5, 0, 30, 0);
+  var range    = new Range(4, 0, 30, 0);
   /* range needs to be calculated based onCursor positions */
+  //editor.getSession().getSelection().selectionLead.setPosition(2,3);
+  editor.moveCursorTo(3,3);
+  var cursor = editor.selection.getCursor();
+  console.log(cursor);
 
 
 
