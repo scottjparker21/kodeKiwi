@@ -159,7 +159,7 @@ function add(x,y) {
     //add anchors to range
     range.start  = session.doc.createAnchor(range.start);
     range.end    = session.doc.createAnchor(range.end);
-  //  range.end.$insertRight = true;
+    range.end.$insertRight = true;
 
     
     function before(obj, method, wrapper) {
