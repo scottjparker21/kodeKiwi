@@ -13,7 +13,6 @@ $(function() {
   //var $gitUsernameInput = $('.gitUsernameInput')
   var $messages = $('.messages'); // Messages area
   var $inputMessage = $('.inputMessage'); // Input message input box
-
   var $loginPage = $('.login.page'); // The login page
   var $chatPage = $('.chat.page'); // The chatroom page
 
@@ -39,8 +38,7 @@ $(function() {
 
   // Sets the client's username
   function setUsername () {
-    username = cleanInput($usernameInput.val().trim());
-
+    username = cleanInput($('.usernameInput').val().trim());
     // If the username is valid
     if (username) {
       $loginPage.fadeOut();
@@ -121,6 +119,7 @@ $(function() {
   // options.prepend - If the element should prepend
   //   all other messages (default = false)
   function addMessageElement (el, options) {
+    $messages = $('.messages');
     var $el = $(el);
 
     // Setup default options
@@ -191,7 +190,6 @@ $(function() {
   }
 
   // Keyboard events
-
   $window.keydown(function (event) {
     if ($("input.inputMessage").is(":focus") || $("input.usernameInput").is(":focus")) {
       // Auto-focus the current input when a key is typed
@@ -285,7 +283,6 @@ var object = {
   }
 }
 
-
   //search for github user button command
   $( "#search").on( "click", function() {
     var text = $("#gitUserRepo").val();
@@ -322,14 +319,30 @@ var object = {
   });
 
 
+  $('#repoOptions').change(function() {
+      console.log('changed');
+      alert($(this).val());
+  });
 
+  //handle oauth login
+  $( "#oauth" ).on("click", oauth);
+
+  function oauth() {
+    console.log('emitting');
+    socket.emit('get url',{});
+  }
+  socket.on('pass url', function (data) {
+    console.log(data + "front ends");
+    var strUrl = data.oauth;
+    window.location.assign(strUrl);
+    // $( "#oauthUrl" ).append(strUrl); 
+  });
 
   $inputMessage.on('input', function() {
     updateTyping();
   });
 
   // Click events
-
   // Focus input when clicking anywhere on login page
   $loginPage.click(function () {
     $currentInput.focus();
@@ -341,7 +354,6 @@ var object = {
   });
 
   // Socket events
-
   // Whenever the server emits 'login', log the login message
   socket.on('login', function (data) {
     connected = true;
@@ -398,3 +410,61 @@ var object = {
     alert("Success! Your file has been pushed to Github!");
   })
 });
+
+//Controllers ---------------------------------------------->
+
+    // create the module and named it kodeKiwiApp
+    // also include ngRoute for all our routing needs
+var kodeKiwiApp = angular.module('kodeKiwiApp', ['ngRoute']);
+    // create the module and name it scotchApp
+    // configure our routes
+    kodeKiwiApp.config(function($routeProvider) {
+        $routeProvider
+              // route for the home page
+            .when('/', {
+                templateUrl : 'pages/login.html',
+                controller  : 'mainController'
+            })
+            // route for the editor and chat page
+            .when('/editor', {
+                templateUrl : 'pages/editor.html',
+                controller  : 'pagesController'
+            })
+            // route for the stats page
+            .when('/stats', {
+                templateUrl : 'pages/stats.html',
+                controller  : 'statController'
+            });
+    });
+
+
+    // Using these controllers for testing purposed atm.
+    // create the controller and inject Angular's $scope
+    kodeKiwiApp.controller('mainController', function($scope) {
+        // create a message to display in our view
+        $scope.message = 'awesome login page...someday';
+    });
+
+    kodeKiwiApp.controller('pagesController', function($scope) {
+        $scope.message = 'dope chat/code editor page.';
+    });
+
+    kodeKiwiApp.controller('statController', function($scope) {
+        $scope.message = 'mint statistics page.';
+    });
+
+
+
+//End Controllers ----------------------------------------->
+
+
+
+
+
+
+
+
+
+
+
+

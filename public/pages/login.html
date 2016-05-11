@@ -1,0 +1,39 @@
+<div class="text-center">
+  <p> login page! {{ message }} </p>
+  <div>
+    <div>
+      <h3 class="title">Please enter a Github username</h3>
+      <div>
+        <input id="gitUserRepo" type="text" placeholder="Github Username"/>
+        <button id="search" type="submit">Submit</button>
+      </div>
+    </div>
+    <br>
+    <br>
+    <div id="list">
+    </div>
+    <div>
+      <strong><p id="selectedRepo"></p></strong>&nbsp;&nbsp;<button id="selectRepository" type="button">Select Repo!</button>
+    </div>
+    <br>
+    <br>
+    <div id="fileList">
+    </div>
+    <div>
+      <strong><p id="selectedFile"></p></strong>&nbsp;&nbsp;<button type="button" id="selectFile">Select File!</button>
+    </div>
+    <div>
+      <button id="oauth" type="submit">Authenticate w/ Github</button>
+    </div>
+     <div id="list"></div>
+     <div id="oauthUrl"></div>
+  </div>
+</div>
+
+<a href='https://github.com/login/oauth/authorize?client_id=92f0b715f8517d5cf638'> Login </a>;
+
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+<script src="../main.js"></script>
