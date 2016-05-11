@@ -1,15 +1,14 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" ng-app="kodeKiwiApp">
 <head>
   <meta charset="UTF-8">
-  <title>Socket.IO Chat Example</title><!-- 
+  <title> Kode Kiwi : Collaborative Code Editor </title><!-- 
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css"> -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">  
   <link rel="stylesheet" href="style.css">
-  
-  
 </head>
 <body>
+<<<<<<< HEAD
   <div class="row">
     <div class="col-lg-6">
       <ul class="pages">
@@ -87,13 +86,21 @@ function add(x,y) {
         </pre>
       </div>
     </div>
+=======
+  <!--   where partials will be injected -->
+  <div id="main">
+      <div ng-view></div>
+      <div id="editor"></div>
+>>>>>>> origin/master
   </div>
-
 
   <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-route.min.js"></script>
   <script src="/main.js"></script>
+<<<<<<< HEAD
   <script src="src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
   <script>
   var Range    = ace.require("ace/range").Range;
@@ -191,5 +198,7 @@ console.log(editor.selection.selectLine());
         next();
     };
   </script>
+=======
+>>>>>>> origin/master
 </body>
 </html>

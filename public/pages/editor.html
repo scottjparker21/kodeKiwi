@@ -1,0 +1,43 @@
+
+<div class="text-center">
+
+	<p> chat/text editor page! {{ message }} </p>
+
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+      <ul class="pages">
+        <li class="chat page">
+          <div class="chatArea">
+            <ul class="messages"> <p> Chat here </p></ul>
+          </div>
+          <input class="inputMessage" placeholder="Type here..."/>
+        </li>
+        <li class="login page">
+          <div class="form">
+            <h3 class="title">What's your nickname?</h3>
+            <input class="usernameInput" type="text" maxlength="14" />
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-lg-6">
+      <div id="list">
+        <!--<button id="list" type="submit">Select</button>-->
+      </div>
+        <pre class="pages" id="editor">
+        </pre>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+  <script src="../src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+   <script src="../main.js"></script>
+  <script>
+    var editor = ace.edit("editor");
+    var code = editor.getValue();
+    editor.setTheme("ace/theme/chaos");
+    editor.session.setMode("ace/mode/javascript");
+  </script>

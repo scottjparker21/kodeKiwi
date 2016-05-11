@@ -1,21 +1,17 @@
-// Setup basic express server
+//Setup basic express server
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 var port = process.env.PORT || 3000;
+// var http  = require('http');
+var https = require('https');
 var Github = require('github-api');
-
-var username = "scottjparker21";
-var reponame = "kodeKiwi";
-var email = "scottjparker21@gmail.com";
-var author = "Scott Parker";
-var oauthToken = "c58aef5b935646fffc952726c5601aa0f1e02a44";
-var options = {
-  'author':{'name': author, 'email': email},
-  'commmitter':{'name': author, 'email': email}
-};
-
+var request = require('request');
+var OAuth2 = require('oauth').OAuth2;
+var qs = require('querystring');
+var bodyParser = require('body-parser');
+var session = require('express-session');
 
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
@@ -24,8 +20,70 @@ server.listen(port, function () {
 // Routing
 app.use(express.static(__dirname + '/public'));
 
-// Chatroom
+//OAuth
+var clientID = '92f0b715f8517d5cf638';
+var clientSecret = 'c51d4e59c57a399d2e512de3a47688377e88f4ca';
+var oauth2 = new OAuth2(clientID,
+                        clientSecret,
+                        'https://github.com/', 
+                        'login/oauth/authorize',
+                        'login/oauth/access_token',
+                        null); /** Custom headers */
 
+//declaring session variable
+var sess;
+
+app.get('/callback', function(req,res) {
+  
+  console.log(req);
+  var access = req.originalUrl.slice(10);
+  var redir = "https://github.com/login/oauth/access_token?client_id="+clientID+"&client_secret="+clientSecret+"redirect_uri=http://localhost:3000/callback&" + access;
+  var code = req.originalUrl.slice(15, req.originalUrl.length-11);
+
+  authenticate(code,function(data,token){
+    // sess = req.sess;
+    // sess.token = token;
+    console.log("token " + token);
+    res.send(token);
+    console.log("session variable with token " + sess.token)
+  }); 
+});
+
+function authenticate(code, cb) {
+  console.log("in authenticate function");
+    var data = qs.stringify({
+        client_id: clientID, //your GitHub client_id
+        client_secret: clientSecret,  //and secret
+        code: code,   //the access code we parsed earlier
+        state: 'haha'
+    });
+
+    var reqOptions = {
+        host: 'github.com',
+        port: '443',
+        path: '/login/oauth/access_token',
+        method: 'POST',
+        headers: { 'content-length': data.length }
+    };
+
+    var body = '';
+    var req = https.request(reqOptions, function(res) {
+        res.setEncoding('utf8');
+        res.on('data', function (chunk) { 
+          body += chunk; 
+        });
+        res.on('end', function() {
+            cb(null, qs.parse(body).access_token);
+        });
+    });
+    
+    req.write(data);
+    req.end();
+    req.on('error', function(e) { cb(e.message); });
+    // window.location.assign('http://localhost:3000/#/');
+}
+
+// Chatroom
 var numUsers = 0;
 
 io.on('connection', function (socket) {
@@ -41,7 +99,6 @@ io.on('connection', function (socket) {
     });
   });
 
-
   //when the client emits 'new code', this listens and executes
   socket.on('new code', function (data) {
     console.log(data);
@@ -49,8 +106,6 @@ io.on('connection', function (socket) {
       code : data
     });
   });
-
-
 
   // when the client emits 'add user', this listens and executes
   socket.on('add user', function (username) {
@@ -84,40 +139,22 @@ io.on('connection', function (socket) {
     });
   });
 
-
-
-
-
-
-
-
-  //when the client emits 'pull user repo', this listens and executes
-/*  socket.on('pull user repo', function (data) {
-    console.log(data);
-    var gitUsername = data
-    var github = new Github({
-      'token' : "1be8e9e4d93624602e0d36fcc32991d90edd1ccd",
-      'auth' : "oauth"
+  //getting url for oauth---------------------------------------- O AUTH --------->
+  socket.on('get url', function (req, res) {
+    var authURL = oauth2.getAuthorizeUrl({
+        redirect_uri: 'http://localhost:3000/callback',
+        scope: ['repo', 'user'],
+        state: 'haha'
     });
-
-    var user = github.getUser(data);
-
-    user.getRepos(function(err, repos) {
-      console.log(repos);
-      io.sockets.emit('display repos', gitUsername, {
-        data : repos
-      });
-    });
-  });*/
-
-
-
-
-
+    var url =  authURL ;
+    //broadcasting url to frontend to append.
+    console.log(url);
+    socket.emit('pass url', { oauth : url});
+  });
 
   socket.on('pull file', function() {
     var github = new Github({
-      'token' : "c58aef5b935646fffc952726c5601aa0f1e02a44",
+      'token' : "e59cbe790a1fffc2ab6de2948b896761ddac443c",
       'auth' : "oauth"
     });
     var repo = github.getRepo(username, reponame);
@@ -130,31 +167,6 @@ io.on('connection', function (socket) {
       });
     });
   });
-
-
-/*  socket.on('push file', function(){
-    var branchToModiy = 'master';
-    var fileToModify = 'chat/public/dummy.html';
-    var fileContents = 'this is an attempt to push to the dummy file';
-    var commitMsg = 'attempting to change dummy file';
-
-    var github = new Github({
-      'token' : "ba26df95ccddf03e066259d517a44e0763a3f052",
-      'auth' : "oauth"
-    });
-
-    var repo = github.getRepo(username, reponame);
-
-    repo.write(branchToModiy, fileToModify, fileContents, commitMsg, options, function(err) {
-      console.log(data);    
-      io.sockets.emit('new push', {
-        file : data
-      });
-    });
-  });*/
-
-
-
 
   // when the user disconnects.. perform this
   socket.on('disconnect', function () {
@@ -169,3 +181,4 @@ io.on('connection', function (socket) {
     }
   });
 });
+
