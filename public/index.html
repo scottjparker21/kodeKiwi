@@ -6,8 +6,7 @@
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css"> -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">  
   <link rel="stylesheet" href="style.css">
-  
-  
+   
 </head>
 <body>
   <div class="row">
@@ -29,8 +28,6 @@
     </div>
     <div class="col-lg-6">
       <div>
-        <button id="button" type="button">Pull!</button>
-        <!-- <button id="push" type="button">Push!</button> -->
         <h3 class="title">Please enter a Github username</h3>
         <div>
           <input id="gitUserRepo" type="text" placeholder="Github Username"/>
@@ -42,32 +39,27 @@
       <div id="list">
       </div>
       <div>
-        <strong><p id="selectedRepo"></p></strong><button id="selectRepository" type="button" onclick="selectRepo()">Select Repo!</button>
+        <strong><p id="selectedRepo"></p></strong>&nbsp;&nbsp;<button id="selectRepository" type="button">Select Repo!</button>
       </div>
+      <br>
+      <br>
       <div id="fileList">
       </div>
       <div>
-        <strong><p id="selectedFile"></p></strong><button type="button" id="selectFile" onclick="selectFile()">Select File!</button>
+        <strong><p id="selectedFile"></p></strong>&nbsp;&nbsp;<button type="button" id="selectFile">Select File!</button>
       </div>
 
       <div>      
         <pre class="pages" id="editor">
         </pre>
       </div>
+
+      <div>
+        <strong><p id="pushedFile"></p></strong>&nbsp;&nbsp;<button type="button" id="pushFile">push File!</button>
+      </div>
+
     </div>
   </div>
-
-  <script>
-    function selectRepo() {
-      var value = document.getElementById("selection").value;
-      document.getElementById("selectedRepo").innerHTML = value;
-    }
-
-    function selectFile() {
-      var file = document.getElementById("fileSelect").value;
-      document.getElementById("selectedFile").innerHTML = file;
-    }
-  </script>
 
   <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>

@@ -53,28 +53,6 @@ $(function() {
     }
   }
 
-
-
-
-/*  function setGithubUser () {
-    gitUser = cleanInput($gitUsernameInput.val().trim());
-
-    // If the github username is valid
-    if (gitUser) {
-      $gitUserPage.fadeOut();
-      $repoListPage.show();
-      $gitUserPage.off('click');
-      $currentGitUsernameInput = $inputMessage.focus();
-
-      // Tell the server the github username your accessing
-      socket.emit('find gitUser', gitUser);
-    }
-  }*/
-
-
-
-
-
   // Sends a chat message
   function sendMessage () {
     var message = $inputMessage.val();
@@ -244,14 +222,11 @@ $(function() {
     }
   } 
 
-  $( "#search").on( "click", function() {
-    var text = $("#gitUserRepo").val();
-    //console.log(text);
-    //var text = $( "#gitUserRepo" ).text();
-    pullUserRepo(text);
-  });
+
  
-  function pullUserRepo(data) {
+var object = {
+   //pulling a list of repos from selected user and appending to a dropdown
+   userRepo : function (data) {
     var gitUsername = data;
     function request() {  
       return $.ajax({
@@ -260,73 +235,92 @@ $(function() {
         cache : 'false',
         url: "https://api.github.com/users/"+gitUsername+"/repos",
         success: function(response) {
-          var dropdown = '<select id="selection">';
+          var dropdown = '&nbsp;&nbsp;<select id="selection">';
           // console.log(response);
           $.each(response.data, function(key, value){
             dropdown += '<option value="' + value.name + '">' + value.name + '</option>';
           });
-          dropdown += '</select>&nbsp;&nbsp;';
+          dropdown += '</select>';
           $('#list').append(dropdown);     
         }
       });
     }
     $(document).ready(request);
-    //return gitUsername;
-  }
-
-  $("#selectRepository").on("click", function() {
-    //console.log("clicked button");
-    var files = $('#selection').val()
-    //console.log(files);
-    pullRepoContents(files);
-  });
-
-  function pullRepoContents(data) {
-    //var text = $("#gitUserRepo").val(); 
-    //var githubUsername = pullUserRepo(text);
-    //console.log(githubUsername);
-    var repoName = data;
-    console.log(repoName);
-    function request() {
+  },
+  repoContents : function (gitUsername, repoSelected) {
+    var repoName = repoSelected;
+    //console.log(repoName);
+    //console.log(gitUsername);
+    function request2() {
       return $.ajax({
         type : 'GET',
         dataType : 'jsonp',
         cache : 'false',
-        url : "https://api.github.com/repos/motlj/"+repoName+"/contents",
+        url : "https://api.github.com/repos/"+gitUsername+"/"+repoName+"/contents",
         success: function(response) {
-          var fileDropdown = '<select id="fileSelect">';
+          var fileDropdown = '&nbsp;&nbsp;<select id="fileSelect">';
           $.each(response.data, function(key, value){
             fileDropdown += '<option value="' + value.path + '">' + value.name + '</option>';
           });
-          fileDropdown += '</select>&nbsp;&nbsp;';
+          fileDropdown += '</select>';
           $('#fileList').append(fileDropdown);
         }
       });
     }
-    $(document).ready(request);
+    $(document).ready(request2);
+  //return gitUsername;
+  },
+  pullFile : function(gitUsername, repoSelected, fileSelected) {
+   // console.log(fileSelected);
+    editor.setValue("https://raw.githubusercontent.com/"+gitUsername+"/"+repoSelected+"/master/"+fileSelected);
+    function request3() {
+      return $.ajax({
+        url : "https://raw.githubusercontent.com/"+gitUsername+"/"+repoSelected+"/master/"+fileSelected,
+        success: function(response) {
+          editor.setValue(response);
+        }
+      });
+    }
+    $(document).ready(request3);
   }
+}
 
-  $( "#selectFile" ).on("click", function(){
-    var file = $('#fileSelect').val();
-    pullFile(file);
+
+  //search for github user button command
+  $( "#search").on( "click", function() {
+    var text = $("#gitUserRepo").val();
+    object.userRepo(text);
   });
 
-  function pullFile(data) {
-    //console.log("pulling file");
-    //console.log(data);
-    var pulledfile = data;
-    //editor.setValue(data);
-    //console.log("pulling file");
-    socket.emit('pull file', pulledfile);
-  }
+  //select user's repo from dropdown button command
+  $("#selectRepository").on("click", function() {
+    var repoSelected = $('#selection').val();
+    var gitUsername = $("#gitUserRepo").val();
+    object.repoContents(gitUsername, repoSelected);
+  });
 
+  //select file from selected repository dropdown button command
+  $( "#selectFile" ).on("click", function(){
+    var repoSelected = $('#selection').val();
+    var gitUsername = $("#gitUserRepo").val();
+    var file = $('#fileSelect').val();
+    //console.log(file);
+    object.pullFile(gitUsername, repoSelected, file);
+  });
 
-  //$( "#push" ).on("click", pushFile);
+  //triggers 'write file' to the server
+  $( "#pushFile" ).on("click", function(){
+    var repoSelected = $('#selection').val();
+    var gitUsername = $("#gitUserRepo").val();
+    var file = $('#fileSelect').val();
+    //console.log(file);
+    var content = editor.getValue();
+    var commitMessage = prompt("Please enter commit message:");
+    var personalGithubUsername = prompt("Please enter your Github username:");
+    var githubEmail = prompt("Please enter the email address associated with your Github account:");
+    socket.emit('write file', repoSelected, gitUsername, file, content, commitMessage, personalGithubUsername, githubEmail);
+  });
 
- /* function pushFile() {
-    console.log("pushing file");
-    socket.emit('push file', {});
-  }*/
 
 
 
@@ -359,15 +353,6 @@ $(function() {
     addParticipantsMessage(data);
   });
 
-
-
-/*  socket.on('repoAccess', function (data) {
-    connected = true;
-    var message = "Welcome to " + data + "'s Github";
-  });*/
-
-
-
   // Whenever the server emits 'new message', update the chat body
   socket.on('new message', function (data) {
     addChatMessage(data);
@@ -387,52 +372,17 @@ $(function() {
   });
 
   socket.on('new code', function (data) {
-    console.log("receiving code");
+    //console.log("receiving code");
     editor.setValue(data.code);
   });
 
-
   //pulls file from git when server emits 'pull file'
-  socket.on('new git', function (data) {
-    console.log("pulling file from server");
-    editor.setValue(data.file);
+  socket.on('new git', function (file) {
+    //console.log(file);
+    //console.log("pulling file from server");
+    //console.log(data.file);
+    editor.setValue(file.data);
   });
-
-
-
-  // pulls repo names from selected git user
-/*  socket.on('display repos', function (gitUsername, data) {
-    console.log("pulling repos from server");
-    var gitUsername = gitUsername;
-    console.log(gitUsername);
-    function request() {  
-      return $.ajax({
-        type : 'GET',
-        dataType : 'jsonp',
-        cache : 'false',
-        url: "https://api.github.com/users/"+gitUsername+"/repos",
-        success: function(response) {
-          $('#list').append('<div class="row">');
-          $.each(response, function(key, value){
-            console.log(value);
-            $('#list').append('<div class="row"><p>' + value[0] +'<p></a><h3>' + value.collectionName + '</h3><h5>' + value.releaseDate.slice(0,4) + '</h5></div>');
-            cover image, name, release year
-          });
-          $('#app').append('</div>');
-        }
-      })
-    }
-    $(document).ready(request);
-
-    console.log(data);
-    console.log(data[0]);
-    document.getElementById("#list").innerHTML = (data.array[0].);
-  });
-*/
-
-
-
-
 
   // Whenever the server emits 'typing', show the typing message
   socket.on('typing', function (data) {
@@ -443,4 +393,8 @@ $(function() {
   socket.on('stop typing', function (data) {
     removeChatTyping(data);
   });
+
+  socket.on('new push', function () {
+    alert("Success! Your file has been pushed to Github!");
+  })
 });

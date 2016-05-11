@@ -6,16 +6,6 @@ var io = require('socket.io').listen(server);
 var port = process.env.PORT || 3000;
 var Github = require('github-api');
 
-var username = "motlj";
-var reponame = "ecommerce";
-var email = "joshuadamotl@gmail.com";
-var author = "Joshua Motl";
-var oauthToken = "26cf51edb6aeb476c2f9d59af458823f5b808690";
-var options = {
-  'author':{'name': author, 'email': email},
-  'commmitter':{'name': author, 'email': email}
-};
-
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
 });
@@ -24,7 +14,6 @@ server.listen(port, function () {
 app.use(express.static(__dirname + '/public'));
 
 // Chatroom
-
 var numUsers = 0;
 
 io.on('connection', function (socket) {
@@ -42,7 +31,7 @@ io.on('connection', function (socket) {
 
   //when the client emits 'new code', this listens and executes
   socket.on('new code', function (data) {
-    console.log(data);
+    //console.log(data);
     socket.broadcast.emit('new code', {
       code : data
     });
@@ -80,64 +69,33 @@ io.on('connection', function (socket) {
     });
   });
 
-  //when the client emits 'pull user repo', this listens and executes
-/*  socket.on('pull user repo', function (data) {
-    console.log(data);
-    var gitUsername = data
+  // whern the client emits write file, this function will push the file to github
+  socket.on('write file', function(repoSelected, gitUsername, file, content, commitMessage, personalGithubUsername, githubEmail){
+   //console.log("made it to server side");
+    var branch = 'master';
+    var committer = {
+      "name" : personalGithubUsername,
+      "email" : githubEmail
+    }
+
     var github = new Github({
-      'token' : "d6f8a56096c7d1c23cc9e22d8238d1ba44d50d5a",
+      'token' : "2110023533866cb9d98302cc7b5a1d9c665af6d8",
       'auth' : "oauth"
     });
 
-    var user = github.getUser(data);
+    var repo = github.getRepo(gitUsername, repoSelected);
 
-    user.getRepos(function(err, repos) {
-      console.log(repos);
-      io.sockets.emit('display repos', gitUsername, {
-        data : repos
-      });
-    });
-  });*/
+    repo.writeFile(branch, file, content, commitMessage, committer, function(data, err) {
+      // console.log(branch);
+      //console.log(file);
+      //console.log(content);
+      //console.log(commitMessage);
+      //console.log(committer);
 
-  socket.on('pull file', function(data) {
-    var filePath = data;
-    filePath += '?ref=master';
-    console.log(filePath);
-    var github = new Github({
-      'token' : "26cf51edb6aeb476c2f9d59af458823f5b808690",
-      'auth' : "oauth"
-    });
-    var repo = github.getRepo(username, reponame);
-    var raw = true;
-    repo.getContents('master', filePath, raw, function(err, data) {
-      //console.log(data);
-      console.log(err);
-      io.sockets.emit('new git', {
-        file : data
+      io.sockets.emit('new push', {
       });
     });
   });
-
-/*  socket.on('push file', function(){
-    var branchToModiy = 'master';
-    var fileToModify = 'chat/public/dummy.html';
-    var fileContents = 'this is an attempt to push to the dummy file';
-    var commitMsg = 'attempting to change dummy file';
-
-    var github = new Github({
-      'token' : "ba26df95ccddf03e066259d517a44e0763a3f052",
-      'auth' : "oauth"
-    });
-
-    var repo = github.getRepo(username, reponame);
-
-    repo.write(branchToModiy, fileToModify, fileContents, commitMsg, options, function(err) {
-      console.log(data);    
-      io.sockets.emit('new push', {
-        file : data
-      });
-    });
-  });*/
 
   // when the user disconnects.. perform this
   socket.on('disconnect', function () {
