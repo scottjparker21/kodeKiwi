@@ -154,3 +154,20 @@ ul {
   right: 0;
   width: 100%;
 }
+
+#list {
+  margin-left: 25px;
+}
+
+
+#editor {
+  position: relative;
+  height: 300px;  
+}
+
+
+.readonly-highlight{
+    background-color: purple;
+    opacity: 0.2;
+    position: absolute;
+}
