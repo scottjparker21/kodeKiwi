@@ -7,67 +7,14 @@
         <div>
           <input id="gitUserRepo" type="text" placeholder="Github Username"/>
           <button id="search" type="submit">Submit</button>
+          <button id="oauth" type="submit">Authenticate w/ Github</button>
         </div>
         <div id="list"></div>
+        <div id="oauthUrl"></div>
       </div>
 </div>
 
-<button onclick="oauth()" type="button">Authenticate with Github</button>
-
-<script>
-  function oauth(){
-    window.open('https://github.com/login/oauth/authorize?client_id=92f0b715f8517d5cf638');
-  }
-  
-  // Extract the auth code from the original URL
-  function getAuthCode(url){
-      console.log("in getAuthCode function");
-      var error = url.match(/[&\?]error=([^&]+)/);
-      if (error) {
-          throw 'Error getting authorization code: ' + error[1];
-      }
-      console.log(url);
-      return url.match(/[&\?]code=([\w\/\-]+)/)[1];
-      
-  }
-
-  var authCode = getAuthCode(window.location.href);
-    console.log(authCode);
-  
-  authenticate(authCode);
-
-
-  function authenticate(code, cb) {
-    console.log('in authenticate');
-    var data = qs.stringify({
-        client_id: config.oauth_client_id, //your GitHub client_id
-        client_secret: config.oauth_client_secret,  //and secret
-       code: code   //the access code we parsed earlier
-    });
-
-    var reqOptions = {
-        host: 'github.com',
-        port: '443',
-        path: '/login/oauth/access_token',
-        method: 'POST',
-        headers: { 'content-length': data.length }
-    };
-
-    var body = '';
-    var req = https.request(reqOptions, function(res) {
-        res.setEncoding('utf8');
-        res.on('data', function (chunk) { body += chunk; });
-        res.on('end', function() {
-            cb(null, qs.parse(body).access_token);
-        });
-    });
-
-    req.write(data);
-    req.end();
-    req.on('error', function(e) { cb(e.message); });
-}
-
-</script>
+<a href='https://github.com/login/oauth/authorize?client_id=92f0b715f8517d5cf638'> Login </a>;
 
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>

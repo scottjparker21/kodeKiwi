@@ -270,26 +270,26 @@ $(function() {
       alert($(this).val());
   });
 
-  // $( "#list" ).on( "click", function() {
-  //   alert($(this).val());
+  //handle oauth login
+  $( "#oauth" ).on("click", oauth);
 
-  //   var text = $("#list").val();
-  //   console.log(text);
-  //   pullfile(text);
-  // });
+  function oauth() {
+    console.log('emitting');
+    socket.emit('get url',{});
+  }
+  socket.on('pass url', function (data) {
+    console.log(data + "front ends");
+    var strUrl = data.oauth;
+    window.location.assign(strUrl);
+    // $( "#oauthUrl" ).append(strUrl); 
+  });
 
+  //handle pulling file
   $( "#button" ).on("click", pullFile);
-
   function pullFile() {
     console.log("pulling file");
     socket.emit('pull file', {});
   }
-  //$( "#push" ).on("click", pushFile);
-
- /* function pushFile() {
-    console.log("pushing file");
-    socket.emit('push file', {});
-  }*/
 
   $inputMessage.on('input', function() {
     updateTyping();
@@ -382,7 +382,6 @@ var kodeKiwiApp = angular.module('kodeKiwiApp', ['ngRoute']);
                 templateUrl : 'pages/stats.html',
                 controller  : 'statController'
             });
-            //for github oauth
     });
 
 
@@ -401,13 +400,8 @@ var kodeKiwiApp = angular.module('kodeKiwiApp', ['ngRoute']);
         $scope.message = 'mint statistics page.';
     });
 
-    kodeKiwiApp.controller('LoginCtrl', function($scope, $auth) {
 
-      $scope.authenticate = function(provider) {
-        $auth.authenticate(provider);
-      };
 
-    });
 //End Controllers ----------------------------------------->
 
 
