@@ -126,7 +126,7 @@ function add(x,y) {
     range.end.$insertRight = true;
 
   if (cursor.row == length - 1) {
-    range = new Range(length-25, 0-8,(length-25) + 25, 0-8);
+    range = new Range(length-26, 0-8,(length-26) + 25, 0-8);
   }
 
   else {
@@ -144,6 +144,11 @@ function add(x,y) {
   /* sets mode mode should be determined via file pulled from github */
   session.setMode("ace/mode/javascript");
   editor.setTheme("ace/theme/chaos");
+
+
+
+editor.selection.moveCursorToPosition({row: 3, column: 0});
+console.log(editor.selection.selectLine());
     
 
 
