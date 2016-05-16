@@ -102,8 +102,22 @@ io.on('connection', function (socket) {
 
   //when the client emits 'new code', this listens and executes
   socket.on('new code', function (data) {
-    //console.log(data);
+    console.log(data);
     socket.broadcast.emit('new code', {
+      code : data
+    });
+  });
+
+  socket.on('new range', function (data) {
+    console.log(data);
+    socket.broadcast.emit('new range', {
+      code : data
+    });
+  });
+
+  socket.on('new cursor', function (data) {
+    console.log(data);
+    socket.broadcast.emit('new cursor', {
       code : data
     });
   });
