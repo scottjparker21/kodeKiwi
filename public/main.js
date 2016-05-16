@@ -211,18 +211,14 @@ $(function() {
 
   $("#editor").on("keyup", function() {
     sendCode();
-    lineBlock();
     getCursor();
-  })
+    lineBlock();
+  });
  // $("#editor").on("keyup", sendCode);
   
   function sendCode() {
-
     var code = editor.getValue();
-
-    socket.emit('new code', code);
-    
-
+    socket.emit('new code', code);  
   } 
 
    function getCursor() {
@@ -233,20 +229,17 @@ $(function() {
     socket.emit('new cursor',code);
   }
 
+   function removeMark () {
+    console.log("working?");
+    editor.getSession().removeMarker(markerId);    
+  }
+
 function lineBlock () {
   console.log("working?");
     var Range    = ace.require("ace/range").Range;
     var code = editor.getValue();
-    editor.getSession().selection.on('changeCursor', removeMark);
-     
+   // editor.getSession().selection.on('changeCursor', removeMark);
 
-  function removeMark () {
-    console.log("working?");
-    editor.getSession().removeMarker(markerId);
-     
-    }
-
-  
   function getRange() {
       var cursor = editor.selection.getCursor();
       var strt = cursor.row;
@@ -264,7 +257,7 @@ function lineBlock () {
               return {command:"null", passEvent:false};
           }
       }
-  });
+  })
 
   range.start  = session.doc.createAnchor(range.start);
   range.end    = session.doc.createAnchor(range.end);
@@ -295,11 +288,9 @@ function lineBlock () {
       if (intersects(range)) return;
       next();
   }
+ //socket.emit('new range', code);   
+} 
 
-    //socket.emit('new range', code);
-    
-
-  } 
 
 var object = {
    //pulling a list of repos from selected user and appending to a dropdown
