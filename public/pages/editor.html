@@ -2,6 +2,10 @@
 <div class="text-center">
 
 	<p> chat/text editor page! {{ message }} </p>
+  <style> .hide { display:none;} </style>
+  <p class="hide" id="file">{{file}}</p>
+  <p class="hide" id="userRepo">{{userRepo}}</p>
+  <p class="hide" id="gitUsername">{{gitUsername}}</p>
 
 </div>
 
@@ -23,54 +27,17 @@
       </ul>
     </div>
     <div class="col-lg-6">
-      <div id="list">
-        <!--<button id="list" type="submit">Select</button>-->
+      <div>
+        <strong><p id="pushedFile"></p></strong>&nbsp;&nbsp;<button type="button" id="pushFile">push File!</button>
       </div>
-        <pre class="pages" id="editor">
-          var x = 5;
-          var y = 10;
-          function add(x,y) {
-            return x+y;
-          }var y = 10;
-          function add(x,y) {
-            return x+y;
-          }var y = 10;
-          function add(x,y) {
-            return x+y;
-          }var y = 10;
-          function add(x,y) {
-            return x+y;
-          }var y = 10;
-          function add(x,y) {
-            return x+y;
-          }var y = 10;
-          function add(x,y) {
-            return x+y;
-          }
-          var x = 5;
-          var y = 10;
-          function add(x,y) {
-            return x+y;
-          }var y = 10;
-          function add(x,y) {
-            return x+y;
-          }var y = 10;
-          function add(x,y) {
-            return x+y;
-          }var y = 10;
-          function add(x,y) {
-            return x+y;
-          }var y = 10;
-          function add(x,y) {
-            return x+y;
-          }var y = 10;
-          function add(x,y) {
-            return x+y;
-          }
-        </pre>
+      
+        <pre class="pages" id="editor"></pre>
+
       </div>
     </div>
   </div>
+
+
   <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
   <script src="../src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
