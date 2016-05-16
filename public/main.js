@@ -209,16 +209,88 @@ $(function() {
     }
   });
 
-  $( "#editor" ).on( "keyup",sendCode);
+  $("#editor").on("keyup", function() {
+    sendCode();
+    getCursor();
+    lineBlock();
+  });
+ // $("#editor").on("keyup", sendCode);
   
   function sendCode() {
     var code = editor.getValue();
-    //console.log("getting input");
-    if (connected) {
-        //console.log("emitting input");
-        socket.emit('new code', code);
-    }
+    socket.emit('new code', code);  
   } 
+
+   function getCursor() {
+    console.log("cuurrsssooorrr");
+    var code = editor.getValue();
+    var cursor = editor.selection.getCursor();
+    var row = cursor.row;
+    socket.emit('new cursor',code);
+  }
+
+   function removeMark () {
+    console.log("working?");
+    editor.getSession().removeMarker(markerId);    
+  }
+
+function lineBlock () {
+  console.log("working?");
+    var Range    = ace.require("ace/range").Range;
+    var code = editor.getValue();
+   // editor.getSession().selection.on('changeCursor', removeMark);
+
+  function getRange() {
+      var cursor = editor.selection.getCursor();
+      var strt = cursor.row;
+      range = new Range(strt + 1, 0, strt + 25, 0);
+      return range;
+    }
+
+  var range = getRange();
+
+  editor.keyBinding.addKeyboardHandler({
+      handleKeyboard : function(data, hash, keyString, keyCode, event) {
+          if (hash === -1 || (keyCode <= 40 && keyCode >= 37)) return false;
+          
+          if (intersects(range)) {
+              return {command:"null", passEvent:false};
+          }
+      }
+  })
+
+  range.start  = session.doc.createAnchor(range.start);
+  range.end    = session.doc.createAnchor(range.end);
+  range.end.$insertRight = true;
+
+  var markerId = session.addMarker(range, "readonly-highlight");
+  
+  //prevents copy/paste injection
+  before(editor, 'onPaste', preventReadonly);
+  before(editor, 'onCut',   preventReadonly);
+  
+  function before(obj, method, wrapper) {
+      var orig = obj[method];
+      obj[method] = function() {
+          var args = Array.prototype.slice.call(arguments);
+          return wrapper.call(this, function(){
+              return orig.apply(obj, args);
+          }, args);
+      }
+      return obj[method];
+  }
+  
+  function intersects(range) {
+      return editor.getSelectionRange().intersects(range);
+  }
+  
+  function preventReadonly(next, args) {
+      if (intersects(range)) return;
+      next();
+  }
+ //socket.emit('new range', code);   
+} 
+
 
 var object = {
    //pulling a list of repos from selected user and appending to a dropdown

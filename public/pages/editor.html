@@ -2,11 +2,7 @@
 <div class="text-center">
 
 	<p> chat/text editor page! {{ message }} </p>
-  <style> .hide { display:none;} </style>
-  <p class="hide" id="file">{{file}}</p>
-  <p class="hide" id="userRepo">{{userRepo}}</p>
-  <p class="hide" id="gitUsername">{{gitUsername}}</p>
-
+ 
 </div>
 
 <div class="row">
@@ -32,7 +28,51 @@
         <button id="oauth" type="submit">Authenticate w/ Github</button>
       </div>
       
+        <pre class="pages" id="editor">
+          var x = 5;
+          var y = 10;
+          function add(x,y) {
+            return x+y;
+          }var y = 10;
+          function add(x,y) {
+            return x+y;
+          }var y = 10;
+          function add(x,y) {
+            return x+y;
+          }var y = 10;
+          function add(x,y) {
+            return x+y;
+          }var y = 10;
+          function add(x,y) {
+            return x+y;
+          }var y = 10;
+          function add(x,y) {
+            return x+y;
+          }
+          var x = 5;
+          var y = 10;
+          function add(x,y) {
+            return x+y;
+          }var y = 10;
+          function add(x,y) {
+            return x+y;
+          }var y = 10;
+          function add(x,y) {
+            return x+y;
+          }var y = 10;
+          function add(x,y) {
+            return x+y;
+          }var y = 10;
+          function add(x,y) {
+            return x+y;
+          }var y = 10;
+          function add(x,y) {
+            return x+y;
+          }
+        </pre>
+    
         <pre class="pages" id="editor"></pre>
+
 
       </div>
     </div>
@@ -45,78 +85,16 @@
    <script src="../main.js"></script>
 
   <script>
-  var Range    = ace.require("ace/range").Range;
+ // var Range    = ace.require("ace/range").Range;
   var editor     = ace.edit("editor");
-  var code = editor.getValue();  
+ // var code = editor.getValue();  
   var session  = editor.getSession();
-  var length = editor.session.getLength();
-  console.log(length);
-  editor.moveCursorTo(length, 0-8);
-  var cursor = editor.selection.getCursor();
-  console.log(cursor);
-   
-  console.log(cursor.row);
-  console.log(cursor.column);
-     
-  //var range = new Range(4, 0, 30, 0);
-  var range = new Range();
 
-   //add anchors to range
-  range.start  = session.doc.createAnchor(range.start);
-  range.end    = session.doc.createAnchor(range.end);
-  range.end.$insertRight = true;
 
-  if (cursor.row == length - 1) {
-    range = new Range(length-26, 0-8,(length-26) + 25, 0-8);
-  } else {
-    range = new Range(1, 0, 1, 0);
-  }
-
-  /* range needs to be calculated based onCursor positions */
-  //editor.getSession().getSelection().selectionLead.setPosition(2,3);
-
-  var markerId = session.addMarker(range, "readonly-highlight");
-    
-  /* sets mode mode should be determined via file pulled from github */
   session.setMode("ace/mode/javascript");
-  editor.setTheme("ace/theme/chaos");
 
-  editor.selection.moveCursorToPosition({row: 3, column: 0});
-  console.log(editor.selection.selectLine());
-    
-//customized key handler function
-  editor.keyBinding.addKeyboardHandler({
-      handleKeyboard : function(data, hash, keyString, keyCode, event) {
-          if (hash === -1 || (keyCode <= 40 && keyCode >= 37)) return false;
-          
-          if (intersects(range)) {
-              return {command:"null", passEvent:false};
-          }
-      }
-  });
+  editor.setTheme("ace/theme/chaos");
   
-  //prevents copy/paste injection
-  before(editor, 'onPaste', preventReadonly);
-  before(editor, 'onCut',   preventReadonly);
-  
-  function before(obj, method, wrapper) {
-      var orig = obj[method];
-      obj[method] = function() {
-          var args = Array.prototype.slice.call(arguments);
-          return wrapper.call(this, function(){
-              return orig.apply(obj, args);
-          }, args);
-      }
-      return obj[method];
-  }
-  
-  function intersects(range) {
-      return editor.getSelectionRange().intersects(range);
-  }
-  
-  function preventReadonly(next, args) {
-      if (intersects(range)) return;
-      next();
-  };
+
   </script>
 
