@@ -150,7 +150,7 @@ io.on('connection', function (socket) {
     }
 
     var github = new Github({
-      'token' : "2110023533866cb9d98302cc7b5a1d9c665af6d8",
+      'token' : "e62753e5f2a5c8bccf3698b5897969d4ba2632d9",
       'auth' : "oauth"
     });
 
