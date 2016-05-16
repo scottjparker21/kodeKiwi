@@ -333,7 +333,13 @@ var object = {
   function oauth() {
     console.log('emitting');
     socket.emit('get url',{});
+    
   }
+
+  socket.on('oauth token',function(data){
+    console.log("oauth data " + data);
+  });
+
   socket.on('pass url', function (data) {
     console.log(data + "front ends");
     var strUrl = data.oauth;
@@ -428,6 +434,11 @@ var kodeKiwiApp = angular.module('kodeKiwiApp', ['ngRoute']);
                 templateUrl : 'pages/login.html',
                 controller  : 'mainController'
             })
+            //grab token from url
+            // .when('/:token', {
+            //     templateUrl : 'pages/login.html',
+            //     controller : 'mainController'
+            // })
             // route for the editor and chat page
 
             .when('/editor/:username/:repo/:file', {
